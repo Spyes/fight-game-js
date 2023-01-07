@@ -1,5 +1,5 @@
 import { canvas } from "../canvas";
-import { gravity } from "../constants";
+import { Settings } from "./Settings";
 import { Vector2 } from "../types/Vector2";
 import { Input } from "./Input";
 import { ISprite, Sprite } from "./Sprite";
@@ -75,7 +75,7 @@ export class Fighter extends Sprite {
       this.velocity.y = 0;
       this.position.y = 330;
     } else {
-      this.velocity.y += gravity * delta;
+      this.velocity.y += Settings.gravity * delta;
     }
 
     this.velocity.x = 0;
@@ -90,7 +90,7 @@ export class Fighter extends Sprite {
     }
 
     if (Input.keys[this.keyMapping.jump].pressed) this.jump();
-    if (Input.keys[this.keyMapping.attack].pressed) this.attack();
+    if (Input.keys[this.keyMapping.attack].pressed && this.image !== this.sprites.attack1.image) this.attack();
 
     if (this.velocity.y < 0) {
       this.switchSprite('jump');
@@ -100,6 +100,9 @@ export class Fighter extends Sprite {
       this.isJumping = false;
     }
 
+    if (this.isAttacking && this.image !== this.sprites.attack1.image) {
+      this.isAttacking = false;
+    }
   }
 
   attack() {

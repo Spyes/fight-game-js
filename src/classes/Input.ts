@@ -1,99 +1,28 @@
 import { Keys } from "../types/Keys";
+import { Settings } from "./Settings";
 
 export class Input {
-  public static keys: Keys = {
-    a: {
-      pressed: false,
-    },
-    d: {
-      pressed: false,
-    },
-    w: {
-      pressed: false,
-    },
-    space: {
-      pressed: false,
-    },
-    ArrowLeft: {
-      pressed: false,
-    },
-    ArrowRight: {
-      pressed: false,
-    },
-    ArrowUp: {
-      pressed: false,
-    },
-    ArrowDown: {
-      pressed: false,
-    },
-  };
+  public static keys: Keys = Settings.availableKeys.reduce((acc: Keys, key: string): Keys => {
+    acc[key] = { pressed: false };
+    return acc;
+  }, {});
 
   static onKeyDown(event: KeyboardEvent): void {
-    switch (event.code) {
-      case 'KeyD':
-        Input.keys.d.pressed = true;
-        break;
-      case 'KeyA':
-        Input.keys.a.pressed = true;
-        break;
-      case 'KeyW':
-        Input.keys.w.pressed = true;
-        break;
-      case 'Space':
-        Input.keys.space.pressed = true;
-        break;
-      case 'ArrowRight':
-        Input.keys.ArrowRight.pressed = true;
-        break;
-      case 'ArrowLeft':
-        Input.keys.ArrowLeft.pressed = true;
-        break;
-      case 'ArrowUp':
-        Input.keys.ArrowUp.pressed = true;
-        break;
-      case 'ArrowDown':
-        Input.keys.ArrowDown.pressed = true;
-        break;
-    }
+    if (Input.keys[event.code]) Input.keys[event.code].pressed = true;
   }
 
   static onKeyUp(event: KeyboardEvent): void {
-    switch (event.code) {
-      case 'KeyD':
-        Input.keys.d.pressed = false;
-        break;
-      case 'KeyA':
-        Input.keys.a.pressed = false;
-        break;
-      case 'KeyW':
-        Input.keys.w.pressed = false;
-        break;
-      case 'Space':
-        Input.keys.space.pressed = false;
-        break;
-      case 'ArrowRight':
-        Input.keys.ArrowRight.pressed = false;
-        break;
-      case 'ArrowLeft':
-        Input.keys.ArrowLeft.pressed = false;
-        break;
-      case 'ArrowUp':
-        Input.keys.ArrowUp.pressed = false;
-        break;
-      case 'ArrowDown':
-        Input.keys.ArrowDown.pressed = false;
-        break;
-    }
+    if (Input.keys[event.code]) Input.keys[event.code].pressed = false;
   }
 
   static StartInput() {
-    window.addEventListener('keydown', this.onKeyDown);
-    window.addEventListener('keyup', this.onKeyUp);
+    window.addEventListener('keydown', Input.onKeyDown);
+    window.addEventListener('keyup', Input.onKeyUp);
   }
 
   static StopInput() {
-    window.removeEventListener('keydown', this.onKeyDown);
-    window.removeEventListener('keyup', this.onKeyUp);
-    Object.keys(this.keys).forEach(key => this.keys[key].pressed = false);
+    window.removeEventListener('keydown', Input.onKeyDown);
+    window.removeEventListener('keyup', Input.onKeyUp);
+    Object.keys(Input.keys).forEach(key => Input.keys[key].pressed = false);
   }
 }

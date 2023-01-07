@@ -80,10 +80,10 @@ const player = new Fighter({
     },
   },
   keyMapping: {
-    left: 'a',
-    right: 'd',
-    jump: 'w',
-    attack: 'space',
+    left: 'KeyA',
+    right: 'KeyD',
+    jump: 'KeyW',
+    attack: 'Space',
   },
 });
 
@@ -199,21 +199,17 @@ function animate(currentTime: DOMHighResTimeStamp): void {
   enemy.update(delta_time_multiplier);
 
   /** Collision Detection */
-  if (collisionRect(player, enemy) && player.isAttacking && player.frameCurrent === 4) {
+  if (player.isAttacking && collisionRect(player, enemy) && player.frameCurrent === 4) {
     player.isAttacking = false;
     enemy.takeHit(25);
     gsap.to('#enemyHealth', { width: `${enemy.health}%` });
   }
 
-  if (player.isAttacking && player.frameCurrent === 4) player.isAttacking = false;
-
-  if (collisionRect(enemy, player) && enemy.isAttacking && enemy.frameCurrent === 2) {
+  if (enemy.isAttacking && collisionRect(enemy, player) && enemy.frameCurrent === 2) {
     enemy.isAttacking = false;
     player.takeHit(10);
     gsap.to('#playerHealth', { width: `${player.health}%` });
   }
-
-  if (enemy.isAttacking && enemy.frameCurrent === 2) enemy.isAttacking = false;
 
   /** End Game */
   if (enemy.health <= 0 || player.health <= 0) {
