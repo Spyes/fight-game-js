@@ -5,6 +5,7 @@ import { Input } from "./Input";
 import { ISprite, Sprite } from "./Sprite";
 
 interface IFighter {
+  name: string;
   position: Vector2;
   velocity: Vector2;
   height?: number;
@@ -21,6 +22,7 @@ type AttackBox = {
 };
 
 export class Fighter extends Sprite {
+  name = '';
   velocity: Vector2 = { x: 0, y: 0 };
   height = 150;
   width = 50;
@@ -38,13 +40,14 @@ export class Fighter extends Sprite {
   keyMapping: Record<string, string> = {};
 
   constructor(
-    { position, velocity, height, health, color, sprites, keyMapping, imageSrc, scale, offset, framesMax, attackBox }:
+    { name, position, velocity, height, health, color, sprites, keyMapping, imageSrc, scale, offset, framesMax, attackBox }:
       IFighter
       & ISprite
       & { attackBox?: AttackBox; }
   ) {
     super(imageSrc, position, scale, offset, framesMax);
 
+    this.name = name;
     this.velocity = velocity;
     this.height = height || this.height;
     this.attackBox.offset = attackBox?.offset || this.attackBox.offset;

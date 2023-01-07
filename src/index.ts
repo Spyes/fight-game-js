@@ -27,6 +27,7 @@ const shop = new Sprite(
 );
 
 const player = new Fighter({
+  name: 'Samurai Mack',
   position: {
     x: 0,
     y: 0,
@@ -88,6 +89,7 @@ const player = new Fighter({
 });
 
 const enemy = new Fighter({
+  name: 'Kenji',
   position: {
     x: 400,
     y: 0,
