@@ -1,12 +1,12 @@
 import './index.css';
 // import reportWebVitals from './reportWebVitals';
 
-import { Keys } from './types/Keys';
 import { Fighter } from './classes/Fighter';
 import { canvas, ctx } from './canvas';
 import { Sprite } from './classes/Sprite';
 import { collisionRect } from './utils/collsionRect';
 import gsap from 'gsap';
+import { Input } from './classes/Input';
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
@@ -79,6 +79,12 @@ const player = new Fighter({
       framesMax: 6,
     },
   },
+  keyMapping: {
+    left: 'a',
+    right: 'd',
+    jump: 'w',
+    attack: 'space',
+  },
 });
 
 const enemy = new Fighter({
@@ -134,22 +140,13 @@ const enemy = new Fighter({
       framesMax: 7,
     },
   },
+  keyMapping: {
+    left: 'ArrowLeft',
+    right: 'ArrowRight',
+    jump: 'ArrowUp',
+    attack: 'ArrowDown',
+  },
 });
-
-const keys: Keys = {
-  a: {
-    pressed: false,
-  },
-  d: {
-    pressed: false,
-  },
-  ArrowLeft: {
-    pressed: false,
-  },
-  ArrowRight: {
-    pressed: false,
-  },
-};
 
 function showWinnerText(): void {
   clearTimeout(timerId);
@@ -201,46 +198,6 @@ function animate(currentTime: DOMHighResTimeStamp): void {
   player.update(delta_time_multiplier);
   enemy.update(delta_time_multiplier);
 
-  /** Player Animation */
-  player.velocity.x = 0;
-  if (keys.a.pressed && player.lastKey === 'a') {
-    player.velocity.x = -10;
-    player.switchSprite('run');
-  } else if (keys.d.pressed && player.lastKey === 'd') {
-    player.velocity.x = 10;
-    player.switchSprite('run');
-  } else {
-    player.switchSprite('idle');
-  }
-
-  if (player.velocity.y < 0) {
-    player.switchSprite('jump');
-  } else if (player.velocity.y > 0) {
-    player.switchSprite('fall');
-  } else {
-    player.isJumping = false;
-  }
-
-  /** Enemy Animation */
-  enemy.velocity.x = 0;
-  if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-    enemy.velocity.x = -10;
-    enemy.switchSprite('run');
-  } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-    enemy.velocity.x = 10;
-    enemy.switchSprite('run');
-  } else {
-    enemy.switchSprite('idle');
-  }
-
-  if (enemy.velocity.y < 0) {
-    enemy.switchSprite('jump');
-  } else if (enemy.velocity.y > 0) {
-    enemy.switchSprite('fall');
-  } else {
-    enemy.isJumping = false;
-  }
-
   /** Collision Detection */
   if (collisionRect(player, enemy) && player.isAttacking && player.frameCurrent === 4) {
     player.isAttacking = false;
@@ -261,6 +218,7 @@ function animate(currentTime: DOMHighResTimeStamp): void {
   /** End Game */
   if (enemy.health <= 0 || player.health <= 0) {
     showWinnerText();
+    Input.StopInput();
   }
   previousTime = currentTime;
   window.requestAnimationFrame(animate);
@@ -268,60 +226,4 @@ function animate(currentTime: DOMHighResTimeStamp): void {
 
 window.requestAnimationFrame(animate);
 
-window.addEventListener('keydown', (event: KeyboardEvent): void => {
-  if (!player.dead) {
-    switch (event.code) {
-      case 'KeyD':
-        keys.d.pressed = true;
-        player.lastKey = 'd';
-        break;
-      case 'KeyA':
-        keys.a.pressed = true;
-        player.lastKey = 'a';
-        break;
-      case 'KeyW':
-        player.jump();
-        break;
-      case 'Space':
-        player.attack();
-        break;
-    }
-  }
-
-  if (!enemy.dead) {
-    switch (event.code) {
-      case 'ArrowRight':
-        keys.ArrowRight.pressed = true;
-        enemy.lastKey = 'ArrowRight';
-        break;
-      case 'ArrowLeft':
-        keys.ArrowLeft.pressed = true;
-        enemy.lastKey = 'ArrowLeft';
-        break;
-      case 'ArrowUp':
-        enemy.jump();
-        break;
-      case 'ArrowDown':
-        enemy.attack();
-        break;
-    }
-  }
-});
-
-window.addEventListener('keyup', (event: KeyboardEvent): void => {
-  switch (event.key) {
-    case 'd':
-      keys.d.pressed = false;
-      break;
-    case 'a':
-      keys.a.pressed = false;
-      break;
-
-    case 'ArrowRight':
-      keys.ArrowRight.pressed = false;
-      break;
-    case 'ArrowLeft':
-      keys.ArrowLeft.pressed = false;
-      break;
-  }
-});
+Input.StartInput();
