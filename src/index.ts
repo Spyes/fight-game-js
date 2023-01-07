@@ -180,25 +180,34 @@ function decreaseTimer(): void {
 
 decreaseTimer();
 
-function animate(): void {
-  window.requestAnimationFrame(animate);
+let frames_per_second = 60;
+let previousTime = performance.now();
+
+let frame_interval = 1000 / frames_per_second;
+let delta_time_multiplier = 1;
+let delta_time = 0;
+function animate(currentTime: DOMHighResTimeStamp): void {
+  delta_time = currentTime - previousTime;
+  delta_time_multiplier = delta_time / frame_interval;
+
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  background.update();
-  shop.update();
+  background.update(delta_time_multiplier);
+  shop.update(delta_time_multiplier);
 
   ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  player.update();
-  enemy.update();
+
+  player.update(delta_time_multiplier);
+  enemy.update(delta_time_multiplier);
 
   /** Player Animation */
   player.velocity.x = 0;
   if (keys.a.pressed && player.lastKey === 'a') {
-    player.velocity.x = -4;
+    player.velocity.x = -10;
     player.switchSprite('run');
   } else if (keys.d.pressed && player.lastKey === 'd') {
-    player.velocity.x = 4;
+    player.velocity.x = 10;
     player.switchSprite('run');
   } else {
     player.switchSprite('idle');
@@ -215,10 +224,10 @@ function animate(): void {
   /** Enemy Animation */
   enemy.velocity.x = 0;
   if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-    enemy.velocity.x = -5;
+    enemy.velocity.x = -10;
     enemy.switchSprite('run');
   } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-    enemy.velocity.x = 5;
+    enemy.velocity.x = 10;
     enemy.switchSprite('run');
   } else {
     enemy.switchSprite('idle');
@@ -253,9 +262,11 @@ function animate(): void {
   if (enemy.health <= 0 || player.health <= 0) {
     showWinnerText();
   }
+  previousTime = currentTime;
+  window.requestAnimationFrame(animate);
 }
 
-animate();
+window.requestAnimationFrame(animate);
 
 window.addEventListener('keydown', (event: KeyboardEvent): void => {
   if (!player.dead) {

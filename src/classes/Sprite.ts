@@ -13,7 +13,10 @@ export class Sprite {
   image = new Image();
   frameCurrent = 0;
   framesElapsed = 0;
-  framesHold = 13;
+  framesHold = 5;
+
+  animAccu = 0;
+  animFrameTime = 6;
 
   constructor(
     imageSrc: string,
@@ -39,14 +42,15 @@ export class Sprite {
     );
   }
 
-  update(): void {
-    this.draw();
-    this.animateFrames();
+  update(delta: number): void {
+    this.draw();   
+    this.animateFrames(delta);
   }
 
-  animateFrames(): void {
-    this.framesElapsed++;
-    if (this.framesElapsed % this.framesHold === 0) {
+  animateFrames(delta: number): void {
+    this.animAccu = this.animAccu + delta;
+    while (this.animAccu > this.animFrameTime) {
+      this.animAccu = this.animAccu - this.animFrameTime;
       if (++this.frameCurrent === this.framesMax) this.frameCurrent = 0;
     }
   }

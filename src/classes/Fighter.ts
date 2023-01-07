@@ -57,21 +57,22 @@ export class Fighter extends Sprite {
     }
   }
 
-  update() {
+  update(delta: number) {
     this.draw();
-    if (!this.dead) this.animateFrames();
+    if (!this.dead) this.animateFrames(delta);
+
+    this.position.x += this.velocity.x * delta;
+    this.position.y += this.velocity.y * delta;
 
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
     this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
 
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
 
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
       this.velocity.y = 0;
       this.position.y = 330;
     } else {
-      this.velocity.y += gravity;
+      this.velocity.y += gravity * delta;
     }
   }
 
