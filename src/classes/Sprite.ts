@@ -1,5 +1,6 @@
 import { ctx } from "../canvas";
 import { Vector2 } from "../types/Vector2";
+import { Base } from "./Base";
 
 export interface ISprite {
   imageSrc: string;
@@ -9,12 +10,9 @@ export interface ISprite {
   framesMax?: number;
 }
 
-export class Sprite {
+export class Sprite extends Base {
   image = new Image();
   frameCurrent = 0;
-  framesElapsed = 0;
-  framesHold = 5;
-
   animAccu = 0;
   animFrameTime = 6;
 
@@ -25,6 +23,8 @@ export class Sprite {
     private offset: Vector2 = { x: 0, y: 0 },
     public framesMax: number = 1,
   ) {
+    super();
+
     this.image.src = imageSrc;
   }
 
