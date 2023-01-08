@@ -1,7 +1,7 @@
 import { canvas } from "../canvas";
 import { Settings } from "./Settings";
 import { Vector2 } from "../types/Vector2";
-import { Input } from "./Input";
+import { Input } from "../ecs/core/Input";
 import { ISprite, Sprite } from "./Sprite";
 
 interface IFighter {

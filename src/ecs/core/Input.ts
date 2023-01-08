@@ -1,5 +1,5 @@
-import { Keys } from "../types/Keys";
-import { Settings } from "./Settings";
+import { Keys } from "../../types/Keys";
+import { Settings } from "../../classes/Settings";
 
 export class Input {
   public static keys: Keys = Settings.availableKeys.reduce((acc: Keys, key: string): Keys => {
@@ -7,20 +7,20 @@ export class Input {
     return acc;
   }, {});
 
-  static onKeyDown(event: KeyboardEvent): void {
+  private static onKeyDown(event: KeyboardEvent): void {
     if (Input.keys[event.code]) Input.keys[event.code].pressed = true;
   }
 
-  static onKeyUp(event: KeyboardEvent): void {
+  private static onKeyUp(event: KeyboardEvent): void {
     if (Input.keys[event.code]) Input.keys[event.code].pressed = false;
   }
 
-  static StartInput() {
+  public static startInput() {
     window.addEventListener('keydown', Input.onKeyDown);
     window.addEventListener('keyup', Input.onKeyUp);
   }
 
-  static StopInput() {
+  public static stopInput() {
     window.removeEventListener('keydown', Input.onKeyDown);
     window.removeEventListener('keyup', Input.onKeyUp);
     Object.keys(Input.keys).forEach(key => Input.keys[key].pressed = false);
