@@ -13,7 +13,7 @@ export class BoxCollisionComponent extends Component {
   private _height: number;
 
   constructor({ position, width, height }: IBoxCollision) {
-    super('BoxCollision');
+    super('BoxCollision', 'collision');
 
     this._position = position;
     this._width = width;

@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { Component } from "../components/Component";
 import { ITransform, TransformComponent } from "../components/TransformComponent";
 import { EntityManager } from "../core/EntityManager";
+import { PubSub } from "../core/PubSub";
 
 export class Entity {
   private _id: string = '';
@@ -21,10 +22,12 @@ export class Entity {
   public addComponent(component: Component) {
     this._components[component.name] = component;
     this._components[component.name].parent = this.id;
+    PubSub.publish(component.topic, ['created', component]);
   }
 
   public removeComponent(component: Component) {
     this._components[component.name].parent = '';
+    PubSub.publish(component.topic, ['destroyed', component]);
     delete this._components[component.name];
   }
 

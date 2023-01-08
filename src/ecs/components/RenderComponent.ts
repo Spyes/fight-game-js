@@ -34,7 +34,7 @@ export class RenderComponent extends Component {
     sprites,
     defaultAnim = '',
   }: IRenderComp) {
-    super('Render');
+    super('Render', 'render');
 
     this._image.src = imageSrc;
     this._width = width || this._image.width;

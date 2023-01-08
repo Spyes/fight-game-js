@@ -12,6 +12,9 @@ import { RenderSystem } from "../systems/RenderSystem";
 import { Player } from "./Player";
 
 export function FightingGame() {
+  SystemManager.systems.push(new RenderSystem());
+  SystemManager.systems.push(new CollisionSystem());
+
   const background = EntityManager.createEntity();
   background.addComponent(new RenderComponent({
     imageSrc: './img/background.png',
@@ -158,9 +161,6 @@ export function FightingGame() {
   });
   player2AttackHitbox.addComponent(boxCollisionComp2);
   player2.addChild(player2AttackHitbox);
-
-  SystemManager.systems.push(new RenderSystem());
-  SystemManager.systems.push(new CollisionSystem());
 
   Game.startGame();
 }

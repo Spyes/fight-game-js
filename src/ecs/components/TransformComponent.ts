@@ -12,7 +12,7 @@ export class TransformComponent extends Component {
   private _scale: Vector2;
 
   constructor({ position = { x: 0, y: 0 }, scale = { x: 1, y: 1 } }) {
-    super('Transform');
+    super('Transform', 'transform');
 
     this._local = position;
     this._position = position;

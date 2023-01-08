@@ -1,5 +1,4 @@
 import { RGBA } from "../../types/RGBA";
-import { Vector2 } from "../../types/Vector2";
 import { Component } from "./Component";
 
 export class OverlayComponent extends Component {
@@ -8,7 +7,7 @@ export class OverlayComponent extends Component {
   private _height: number;
 
   constructor(rgba: RGBA, width: number, height: number) {
-    super('Overlay');
+    super('Overlay', 'render');
 
     this._rgba = rgba;
     this._width = width;
