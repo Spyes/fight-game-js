@@ -8,5 +8,5 @@ export abstract class System {
     this._id = v4();
   }
 
-  public abstract update(entity: Entity[], delta: number): void;
+  public abstract update(entityIds: string[], delta: number): void;
 }

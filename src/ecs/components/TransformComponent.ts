@@ -1,5 +1,4 @@
 import { Vector2 } from "../../types/Vector2";
-import { Entity } from "../entities/Entity";
 import { Component } from "./Component";
 
 export interface ITransform {

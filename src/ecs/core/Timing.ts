@@ -14,8 +14,8 @@ export class Timing {
     Timing.delta_time = currentTime - Timing.previousTime;
     Timing.delta_time_multiplier = Timing.delta_time / Timing.frame_interval;
 
-    EntityManager.entities.forEach(entity => entity.update(Timing.delta_time_multiplier));
-    SystemManager.systems.forEach(system => system.update(EntityManager.entities, Timing.delta_time_multiplier));
+    EntityManager.entityIds.forEach(entityId => EntityManager.getEntity(entityId).update(Timing.delta_time_multiplier));
+    SystemManager.systems.forEach(system => system.update(EntityManager.entityIds, Timing.delta_time_multiplier));
 
     Timing.previousTime = currentTime;
     window.requestAnimationFrame(Timing.tick);

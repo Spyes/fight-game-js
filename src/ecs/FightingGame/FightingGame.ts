@@ -47,7 +47,7 @@ export function FightingGame() {
 
   const player1 = new Player({
     name: 'Kenji',
-    position: { x: 400, y: 0 },
+    position: { x: 600, y: 0 },
     imageSrc: './img/Kenji/Idle.png',
     width: 50,
     height: 150,
@@ -86,6 +86,13 @@ export function FightingGame() {
     }
   });
   const player1AttackHitbox = new Entity({ position: { x: -170, y: 40 } });
+  EntityManager.createEntity({
+    entity: player1,
+  });
+  EntityManager.createEntity({
+    entity: player1AttackHitbox,
+  });
+
   player1AttackHitbox.addComponent(new OverlayComponent({ r: 255, g: 255, b: 255, a: 1 }, 150, 50));
   const boxCollisionComp1 = new BoxCollisionComponent({
     position: (player1AttackHitbox.components.Transform as TransformComponent).position,
@@ -94,12 +101,6 @@ export function FightingGame() {
   });
   player1AttackHitbox.addComponent(boxCollisionComp1);
   player1.addChild(player1AttackHitbox);
-  EntityManager.createEntity({
-    entity: player1,
-  });
-  EntityManager.createEntity({
-    entity: player1AttackHitbox,
-  });
 
   const player2 = new Player({
     name: 'Samurai Mack',
@@ -141,7 +142,14 @@ export function FightingGame() {
       attack: 'Space',
     }
   });
-  const player2AttackHitbox = new Entity({ position: { x: 80, y: 40 } });
+  const player2AttackHitbox = new Entity({ position: { x: 80, y: 1 } });
+  EntityManager.createEntity({
+    entity: player2,
+  });
+  EntityManager.createEntity({
+    entity: player2AttackHitbox,
+  });
+
   player2AttackHitbox.addComponent(new OverlayComponent({ r: 255, g: 255, b: 255, a: 1 }, 150, 50));
   const boxCollisionComp2 = new BoxCollisionComponent({
     position: (player2AttackHitbox.components.Transform as TransformComponent).position,
@@ -150,12 +158,6 @@ export function FightingGame() {
   });
   player2AttackHitbox.addComponent(boxCollisionComp2);
   player2.addChild(player2AttackHitbox);
-  EntityManager.createEntity({
-    entity: player2,
-  });
-  EntityManager.createEntity({
-    entity: player2AttackHitbox,
-  });
 
   SystemManager.systems.push(new RenderSystem());
   SystemManager.systems.push(new CollisionSystem());
