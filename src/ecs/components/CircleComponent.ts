@@ -1,4 +1,4 @@
-import { RGBA } from "../../types/RGBA";
+import { RGBA } from "../core/RGBA";
 import { Component } from "./Component";
 
 export class CircleComponent extends Component {
@@ -12,9 +12,6 @@ export class CircleComponent extends Component {
     this._radius = radius;
   }
 
+  public get rgba() { return this._rgba; }
   public get radius() { return this._radius; }
-
-  public toString(): string {
-    return `rgba(${this._rgba.r}, ${this._rgba.g}, ${this._rgba.b}, ${this._rgba.a})`
-  }
 }

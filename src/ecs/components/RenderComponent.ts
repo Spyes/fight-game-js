@@ -1,4 +1,4 @@
-import { Vector2 } from "../../types/Vector2";
+import { Vector2 } from "../core/Vector2";
 import { Component } from "./Component";
 
 type AnimSprite = {
@@ -30,7 +30,7 @@ export class RenderComponent extends Component {
     imageSrc,
     width,
     height,
-    offset = { x: 0, y: 0 },
+    offset = Vector2.Zero,
     sprites,
     defaultAnim = '',
   }: IRenderComp) {

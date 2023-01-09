@@ -1,4 +1,4 @@
-import { Vector2 } from "../../types/Vector2";
+import { Vector2 } from "../core/Vector2";
 import { Component } from "./Component";
 
 interface IBoxCollision {
@@ -12,7 +12,7 @@ export class BoxCollisionComponent extends Component {
   private _width: number;
   private _height: number;
 
-  constructor({ position = { x: 0, y: 0 }, width, height }: IBoxCollision) {
+  constructor({ position = Vector2.Zero, width, height }: IBoxCollision) {
     super('BoxCollision', 'collision');
 
     this._position = position;

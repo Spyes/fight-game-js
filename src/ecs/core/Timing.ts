@@ -1,5 +1,5 @@
-import { EntityManager } from "./EntityManager";
-import { SystemManager } from "./SystemManager";
+import { EntityManager } from "./managers/EntityManager";
+import { SystemManager } from "./managers/SystemManager";
 
 export class Timing {
   private static frames_per_second = 60;

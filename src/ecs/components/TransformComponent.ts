@@ -1,4 +1,4 @@
-import { Vector2 } from "../../types/Vector2";
+import { Vector2 } from "../core/Vector2";
 import { Component } from "./Component";
 
 export interface ITransform {
@@ -11,7 +11,7 @@ export class TransformComponent extends Component {
   private _position: Vector2;
   private _scale: Vector2;
 
-  constructor({ position = { x: 0, y: 0 }, scale = { x: 1, y: 1 } }) {
+  constructor({ position = Vector2.Zero, scale = Vector2.One }: ITransform) {
     super('Transform', 'transform');
 
     this._local = position;

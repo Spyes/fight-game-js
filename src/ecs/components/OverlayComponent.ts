@@ -1,4 +1,4 @@
-import { RGBA } from "../../types/RGBA";
+import { RGBA } from "../core/RGBA";
 import { Component } from "./Component";
 
 export class OverlayComponent extends Component {
@@ -14,10 +14,7 @@ export class OverlayComponent extends Component {
     this._height = height;
   }
 
+  public get rgba() { return this._rgba; }
   public get width() { return this._width; }
   public get height() { return this._height; }
-
-  public toString(): string {
-    return `rgba(${this._rgba.r}, ${this._rgba.g}, ${this._rgba.b}, ${this._rgba.a})`
-  }
 }

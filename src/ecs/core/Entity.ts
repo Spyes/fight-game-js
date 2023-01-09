@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 import { Component } from "../components/Component";
 import { ITransform, TransformComponent } from "../components/TransformComponent";
-import { EntityManager } from "./EntityManager";
+import { EntityManager } from "./managers/EntityManager";
 import { PubSub } from "./PubSub";
 
 export class Entity {
@@ -46,8 +46,6 @@ export class Entity {
   public getParent() {
     return EntityManager.getEntity(this.parent);
   }
-
-  public onCollide(hit: Entity) {}
 
   public update(delta: number) {}
 }

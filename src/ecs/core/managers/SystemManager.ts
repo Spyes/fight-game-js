@@ -1,4 +1,4 @@
-import { System } from "../systems/System";
+import { System } from "../../systems/System";
 
 export class SystemManager {
   private static _systems: System[] = [];

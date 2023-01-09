@@ -1,5 +1,5 @@
-import { ITransform } from "../components/TransformComponent";
-import { Entity } from "./Entity";
+import { ITransform } from "../../components/TransformComponent";
+import { Entity } from "../Entity";
 
 interface ICreateEntity {
   entity?: Entity;

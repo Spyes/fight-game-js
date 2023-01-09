@@ -1,6 +1,7 @@
 import { BoxCollisionComponent } from "../components/BoxCollisionComponent";
+import { Collision } from "../components/Collision";
 import { TransformComponent } from "../components/TransformComponent";
-import { EntityManager } from "../core/EntityManager";
+import { EntityManager } from "../core/managers/EntityManager";
 import { System } from "./System";
 
 export class CollisionSystem extends System {
@@ -14,7 +15,7 @@ export class CollisionSystem extends System {
       const parentTransformA = entityA.transform as TransformComponent;
       for (const componentB of this._components) {
         const entityB = EntityManager.getEntity(componentB.parent);
-        if (entityA !== entityB && entityB.components.BoxCollision) {
+        if (entityA !== entityB) {
           const parentTransformB = entityB.transform as TransformComponent
           if (this.collisionRect(
             componentA as BoxCollisionComponent,
@@ -22,8 +23,9 @@ export class CollisionSystem extends System {
             parentTransformA,
             parentTransformB
           )) {
-            if (entityA.onCollide) {
-              entityA.onCollide(entityB);
+            const collision = (entityA as unknown) as Collision;
+            if (collision.onCollide) {
+              collision.onCollide(componentB as BoxCollisionComponent);
             }
           }
         }

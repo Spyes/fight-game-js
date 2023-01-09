@@ -1,7 +1,7 @@
-import { Input } from "./Input";
-import { Timing } from "./Timing";
+import { Input } from "../Input";
+import { Timing } from "../Timing";
 
-export class Game {
+export class GameManager {
   public static startGame() {
     Timing.startTiming();
     Input.startInput();

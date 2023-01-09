@@ -1,12 +1,10 @@
-import { canvas } from "../../canvas";
-import { Settings } from "../../classes/Settings";
-import { Vector2 } from "../../types/Vector2";
-import { BoxCollisionComponent } from "../components/BoxCollisionComponent";
-import { OverlayComponent } from "../components/OverlayComponent";
-import { RenderComponent } from "../components/RenderComponent";
-import { TransformComponent } from "../components/TransformComponent";
-import { Input } from "../core/Input";
-import { Entity } from "../core/Entity";
+import { canvas } from "../../../canvas";
+import { Settings } from "../../../classes/Settings";
+import { RenderComponent } from "../../components/RenderComponent";
+import { TransformComponent } from "../../components/TransformComponent";
+import { Input } from "../../core/Input";
+import { Entity } from "../../core/Entity";
+import { Vector2 } from "../../core/Vector2";
 
 interface IPlayer {
   name: string;
@@ -23,12 +21,11 @@ interface IPlayer {
 
 export class Player extends Entity {
   _name: string;
-  _velocity: Vector2 = { x: 0, y: 0 };
+  _velocity: Vector2 = Vector2.Zero;
   _isJumping: boolean = false;
   _keyMappings: Record<string, string>;
 
   _renderComp: RenderComponent;
-  // _boxCollisionComp: BoxCollisionComponent;
   _transformComp: TransformComponent;
 
   constructor({ name, position, keyBindings, imageSrc, width, height, offset, scale, sprites, defaultAnim }: IPlayer) {
@@ -47,13 +44,6 @@ export class Player extends Entity {
       sprites,
     });
     this.addComponent(this._renderComp);
-
-    // this._boxCollisionComp = new BoxCollisionComponent({
-    //   position: this._transformComp.position,
-    //   height,
-    //   width,
-    // });
-    // this.addComponent(this._boxCollisionComp);
   }
 
   update(delta: number): void {
