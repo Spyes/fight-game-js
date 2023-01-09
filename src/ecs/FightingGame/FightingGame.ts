@@ -6,7 +6,7 @@ import { TransformComponent } from "../components/TransformComponent";
 import { EntityManager } from "../core/EntityManager";
 import { Game } from "../core/Game";
 import { SystemManager } from "../core/SystemManager";
-import { Entity } from "../entities/Entity";
+import { Entity } from "../core/Entity";
 import { CollisionSystem } from "../systems/CollisionSystem";
 import { RenderSystem } from "../systems/RenderSystem";
 import { Player } from "./Player";

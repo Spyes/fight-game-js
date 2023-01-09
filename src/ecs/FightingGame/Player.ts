@@ -6,7 +6,7 @@ import { OverlayComponent } from "../components/OverlayComponent";
 import { RenderComponent } from "../components/RenderComponent";
 import { TransformComponent } from "../components/TransformComponent";
 import { Input } from "../core/Input";
-import { Entity } from "../entities/Entity";
+import { Entity } from "../core/Entity";
 
 interface IPlayer {
   name: string;

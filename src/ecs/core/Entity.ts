@@ -1,8 +1,8 @@
 import { v4 } from "uuid";
 import { Component } from "../components/Component";
 import { ITransform, TransformComponent } from "../components/TransformComponent";
-import { EntityManager } from "../core/EntityManager";
-import { PubSub } from "../core/PubSub";
+import { EntityManager } from "./EntityManager";
+import { PubSub } from "./PubSub";
 
 export class Entity {
   private _id: string = '';
