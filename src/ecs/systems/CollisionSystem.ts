@@ -11,22 +11,20 @@ export class CollisionSystem extends System {
   public update(delta: number) {
     for (const componentA of this._components) {
       const entityA = EntityManager.getEntity(componentA.parent);
-      const parentTransformA = EntityManager.getEntity(entityA.parent)
-        ? EntityManager.getEntity(entityA.parent).components.Transform as TransformComponent
-        : undefined;
+      const parentTransformA = entityA.transform as TransformComponent;
       for (const componentB of this._components) {
         const entityB = EntityManager.getEntity(componentB.parent);
         if (entityA !== entityB && entityB.components.BoxCollision) {
-          const parentTransformB = EntityManager.getEntity(entityB.parent)
-            ? EntityManager.getEntity(entityB.parent).components.Transform as TransformComponent
-            : undefined;
+          const parentTransformB = entityB.transform as TransformComponent
           if (this.collisionRect(
             componentA as BoxCollisionComponent,
             componentB as BoxCollisionComponent,
             parentTransformA,
             parentTransformB
           )) {
-            console.log('we have a collision!!');
+            if (entityA.onCollide) {
+              entityA.onCollide(entityB);
+            }
           }
         }
       }

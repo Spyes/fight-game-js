@@ -2,6 +2,7 @@
 // // import reportWebVitals from './reportWebVitals';
 
 import { FightingGame } from "./ecs/FightingGame/FightingGame";
+import { Pong } from "./ecs/Pong/Pong";
 
 // import { Fighter } from './classes/Fighter';
 // import { canvas, ctx } from './canvas';
@@ -228,4 +229,5 @@ import { FightingGame } from "./ecs/FightingGame/FightingGame";
 
 // Input.startInput();
 
-FightingGame();
+Pong();
+// FightingGame();

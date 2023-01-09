@@ -98,7 +98,7 @@ export function FightingGame() {
 
   player1AttackHitbox.addComponent(new OverlayComponent({ r: 255, g: 255, b: 255, a: 1 }, 150, 50));
   const boxCollisionComp1 = new BoxCollisionComponent({
-    position: (player1AttackHitbox.components.Transform as TransformComponent).position,
+    position: (player1AttackHitbox.transform as TransformComponent).position,
     width: 150,
     height: 50,
   });
@@ -155,7 +155,7 @@ export function FightingGame() {
 
   player2AttackHitbox.addComponent(new OverlayComponent({ r: 255, g: 255, b: 255, a: 1 }, 150, 50));
   const boxCollisionComp2 = new BoxCollisionComponent({
-    position: (player2AttackHitbox.components.Transform as TransformComponent).position,
+    position: (player2AttackHitbox.transform as TransformComponent).position,
     width: 150,
     height: 50,
   });

@@ -36,7 +36,7 @@ export class Player extends Entity {
 
     this._name = name;
     this._keyMappings = keyBindings;
-    this._transformComp = this.components.Transform as TransformComponent;
+    this._transformComp = this.transform as TransformComponent;
 
     this._renderComp = new RenderComponent({
       imageSrc,

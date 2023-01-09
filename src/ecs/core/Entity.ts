@@ -8,15 +8,19 @@ export class Entity {
   private _id: string = '';
   private _components: Record<string, Component> = {};
   private _parent: string = '';
+  private _transform: TransformComponent;
 
   public get id() { return this._id; }
   public get components() { return this._components; }
   public get parent(): string { return this._parent; }
   public set parent(parent: string) { this._parent = parent; }
+  public get transform() { return this._transform; }
 
   constructor({ position, scale }: ITransform) {
     this._id = v4();
-    this.addComponent(new TransformComponent({ position, scale }));
+    const transformComp = new TransformComponent({ position, scale });
+    this.addComponent(transformComp);
+    this._transform = transformComp;
   }
 
   public addComponent(component: Component) {
@@ -42,6 +46,8 @@ export class Entity {
   public getParent() {
     return EntityManager.getEntity(this.parent);
   }
+
+  public onCollide(hit: Entity) {}
 
   public update(delta: number) {}
 }
