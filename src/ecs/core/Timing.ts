@@ -29,4 +29,3 @@ export class Timing {
     window.cancelAnimationFrame(Timing._handleId);
   }
 }
-

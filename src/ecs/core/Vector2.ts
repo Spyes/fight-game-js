@@ -56,6 +56,22 @@ export class Vector2 {
     );
   }
 
+  public static div(a: Vector2, b: Vector2 | number): Vector2 {
+    if (typeof b === 'number') {
+      if (b === 0) throw new Error('Cannot divide by zero');
+      return new Vector2(
+        a.x / b,
+        a.y / b,
+      );
+    }
+
+    if (b.x === 0 || b.y === 0) throw new Error('Cannot divid by zero');
+    return new Vector2(
+      a.x / b.x,
+      a.y / b.y,
+    );
+  }
+
   public get x() { return this._x; }
   public set x(x: number) { this._x = x; }
 
