@@ -9,12 +9,13 @@ export interface ITextComponent {
 }
 
 export class TextComponent extends Component {
+  _topic: string = 'render';
   private _rgba: RGBA;
   private _text: string;
   private _font: string;
 
   constructor({ rgba, text, font }: ITextComponent) {
-    super('Text', 'render');
+    super('Text');
 
     this._rgba = rgba;
     this._text = text;

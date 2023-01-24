@@ -14,7 +14,7 @@ export class ScoreText extends Entity {
   _textComp: TextComponent;
 
   constructor({ position, player }: IScoreText) {
-    super({ position });
+    super({ position, name: 'ScoreText' });
 
     this._player = player;
 

@@ -1,3 +1,4 @@
+import { EntityManager } from "../core/managers/EntityManager";
 import { Vector2 } from "../core/Vector2";
 import { Component } from "./Component";
 
@@ -7,23 +8,28 @@ export interface ITransform {
 }
 
 export class TransformComponent extends Component {
-  private _local: Vector2;
+  _topic: string = 'transform';
   private _position: Vector2;
   private _scale: Vector2;
 
   constructor({ position = Vector2.Zero, scale = Vector2.One }: ITransform) {
-    super('Transform', 'transform');
+    super('Transform');
 
-    this._local = position;
     this._position = position;
     this._scale = scale;
+
+    this._exposed = [
+      'position',
+    ];
   }
 
-  public get position() { return this._position; }
+  public get position() {
+    const entity = EntityManager.getEntity(this.parent);
+    const parentEntity = EntityManager.getEntity(entity.parent);
+    const parentPosition = parentEntity ? parentEntity.transform.position : Vector2.Zero;
+    return Vector2.add(this._position, parentPosition);
+  }
   public set position(position: Vector2) { this._position = position; }
-
-  public get local() { return this._local; }
-  public set local(local: Vector2) { this._local = local; }
 
   public get scale() { return this._scale; }
   public set scale(scale: Vector2) { this._scale = scale; }

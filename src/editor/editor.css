@@ -1,0 +1,14 @@
+.editor-container {
+  display: flex;
+  gap: 10px;
+}
+
+.panel {
+  width: 600px;
+  flex-grow: 1;
+}
+
+.panel.left {
+  width: 350px;
+  flex-grow: 0;
+}

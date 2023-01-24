@@ -1,5 +1,5 @@
 import { canvas } from "../../../canvas";
-import { BoxCollisionComponent } from "../../components/BoxCollisionComponent";
+import { CollisionComponent } from "../../components/CollisionComponent";
 import { OverlayComponent } from "../../components/OverlayComponent";
 import { Entity } from "../../core/Entity";
 import { Input } from "../../core/Input";
@@ -22,7 +22,7 @@ export class Paddle extends Entity {
   public set velocity(velocity: Vector2) { this._velocity = velocity; }
 
   constructor({ position, keyBindings }: IPaddle) {
-    super({ position });
+    super({ position, name: 'Paddle' });
 
     this._keyBindings = keyBindings;
 
@@ -32,9 +32,11 @@ export class Paddle extends Entity {
       this._height,
     ));
  
-    this.addComponent(new BoxCollisionComponent({
+    this.addComponent(new CollisionComponent({
       width: this._width,
       height: this._height,
+      layer: 1,
+      layerMask: [2],
     }));
 
   }

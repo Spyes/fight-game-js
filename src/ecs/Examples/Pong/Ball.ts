@@ -1,7 +1,6 @@
 import { canvas } from "../../../canvas";
-import { BoxCollisionComponent } from "../../components/BoxCollisionComponent";
+import { CollisionComponent } from "../../components/CollisionComponent";
 import { CircleComponent } from "../../components/CircleComponent";
-import { Collision } from "../../components/Collision";
 import { Entity } from "../../core/Entity";
 import { EntityManager } from "../../core/managers/EntityManager";
 import { RGBA } from "../../core/RGBA";
@@ -14,14 +13,14 @@ interface IBall {
   radius: number;
 }
 
-export class Ball extends Entity implements Collision {
+export class Ball extends Entity {
   private _velocity: Vector2 = Vector2.Zero;
   private _radius: number;
   private _speed: number = 1;
   private _initialPosition: Vector2;
 
   constructor({ position, radius }: IBall) {
-    super({ position });
+    super({ position, name: 'Ball' });
 
     this._initialPosition = new Vector2(position.x, position.y);
     this._radius = radius;
@@ -31,9 +30,12 @@ export class Ball extends Entity implements Collision {
       radius,
     ));
 
-    this.addComponent(new BoxCollisionComponent({
+    this.addComponent(new CollisionComponent({
       width: radius,
       height: radius,
+      layer: 2,
+      layerMask: [1],
+      onCollide: (hit: CollisionComponent) => this.onCollide(hit),
     }));
 
     this._velocity.x = (Date.now() % 2 === 0 ? 1 : -1) * this._speed;
@@ -63,7 +65,7 @@ export class Ball extends Entity implements Collision {
     }
   }
 
-  public onCollide(hit: BoxCollisionComponent): void {
+  public onCollide(hit: CollisionComponent): void {
     const paddle = EntityManager.getEntity(hit.parent) as Paddle;
     this._velocity = new Vector2(
       -this._velocity.x,
@@ -74,8 +76,7 @@ export class Ball extends Entity implements Collision {
   public reset() {
     this._speed = 1;
 
-    this.transform.position.x = this._initialPosition.x;
-    this.transform.position.y = this._initialPosition.y;
+    this.transform.position = this._initialPosition;
 
     this._velocity.x = (Date.now() % 2 === 0 ? 1 : -1) * this._speed;
     this._velocity.y = (Date.now() % 2 === 0 ? 1 : -1) * this._speed;

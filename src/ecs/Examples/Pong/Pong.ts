@@ -16,7 +16,7 @@ export function Pong() {
   SystemManager.systems.push(new RenderSystem());
   SystemManager.systems.push(new CollisionSystem());
 
-  const background = EntityManager.createEntity();
+  const background = EntityManager.createEntity({ name: 'Background' });
   background.addComponent(new OverlayComponent(
     RGBA.Black,
     canvas.width,
@@ -25,6 +25,7 @@ export function Pong() {
 
   const divider = EntityManager.createEntity({
     position: new Vector2((canvas.width / 2) - 5, 0),
+    name: 'Divider',
   });
   divider.addComponent(new OverlayComponent(
     RGBA.White,

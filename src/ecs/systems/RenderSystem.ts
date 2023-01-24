@@ -14,13 +14,14 @@ export class RenderSystem extends System {
 
   public update(delta: number) {
     for (const component of this._components) {
+      if (!component.enabled) continue;
       const entity = EntityManager.getEntity(component.parent);
       const transform = entity.transform as TransformComponent;
       const parentTransform = EntityManager.getEntity(entity.parent)
         ? EntityManager.getEntity(entity.parent).transform as TransformComponent
         : undefined;
 
-        if (component.name === 'Render') {
+      if (component.name === 'Render') {
         const renderComp = component as RenderComponent;
         this.draw(transform, renderComp, parentTransform);
         if (renderComp.sprites) {
@@ -47,17 +48,17 @@ export class RenderSystem extends System {
     ctx.font = textComp.font;
     ctx.fillText(
       textComp.text,
-      (parentTransform?.position?.x || 0) + transform.position.x,
-      (parentTransform?.position?.y || 0) + transform.position.y,
+      transform.position.x,
+      transform.position.y,
     );
   }
 
-  private drawCircle(transform: TransformComponent, circleComp: CircleComponent, parentTransform?: TransformComponent) { 
+  private drawCircle(transform: TransformComponent, circleComp: CircleComponent, parentTransform?: TransformComponent) {
     ctx.fillStyle = circleComp.rgba.toString();
     ctx.beginPath();
     ctx.arc(
-      (parentTransform?.position?.x || 0) + transform.position.x,
-      (parentTransform?.position?.y || 0) + transform.position.y,
+      transform.position.x,
+      transform.position.y,
       circleComp.radius,
       0,
       Math.PI * 2
@@ -68,8 +69,8 @@ export class RenderSystem extends System {
   private drawOverlay(transform: TransformComponent, overlayComp: OverlayComponent, parentTransform?: TransformComponent) {
     ctx.fillStyle = overlayComp.rgba.toString();
     ctx.fillRect(
-      (parentTransform?.position?.x || 0) + transform.position.x,
-      (parentTransform?.position?.y || 0) + transform.position.y,
+      transform.position.x,
+      transform.position.y,
       overlayComp.width,
       overlayComp.height,
     );
@@ -82,8 +83,8 @@ export class RenderSystem extends System {
       0,
       renderComp.image.width / renderComp.framesMax,
       renderComp.image.height,
-      (parentTransform?.position?.x || 0) + transform.position.x - renderComp.offset.x,
-      (parentTransform?.position?.y || 0) + transform.position.y - renderComp.offset.y,
+      transform.position.x - renderComp.offset.x,
+      transform.position.y - renderComp.offset.y,
       (renderComp.image.width / renderComp.framesMax) * transform.scale.x,
       renderComp.image.height * transform.scale.y,
     );
@@ -93,7 +94,12 @@ export class RenderSystem extends System {
     renderComp.animAccu = renderComp.animAccu + delta;
     while (renderComp.animAccu > renderComp.animFrameTime) {
       renderComp.animAccu = renderComp.animAccu - renderComp.animFrameTime;
-      if (++renderComp.frameCurrent === renderComp.framesMax) renderComp.frameCurrent = 0;
+      const frameEvent = renderComp.sprites?.[renderComp.sprite]?.events?.[renderComp.frameCurrent];
+      if (frameEvent !== undefined) frameEvent();
+      if (++renderComp.frameCurrent === renderComp.framesMax) {
+        renderComp.frameCurrent = 0;
+        renderComp.onAnimationEnd();
+      }
     }
   }
 }

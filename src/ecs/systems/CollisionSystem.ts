@@ -1,5 +1,4 @@
-import { BoxCollisionComponent } from "../components/BoxCollisionComponent";
-import { Collision } from "../components/Collision";
+import { CollisionComponent } from "../components/CollisionComponent";
 import { TransformComponent } from "../components/TransformComponent";
 import { EntityManager } from "../core/managers/EntityManager";
 import { System } from "./System";
@@ -10,23 +9,20 @@ export class CollisionSystem extends System {
   }
 
   public update(delta: number) {
-    for (const componentA of this._components) {
-      const entityA = EntityManager.getEntity(componentA.parent);
-      const parentTransformA = entityA.transform as TransformComponent;
-      for (const componentB of this._components) {
-        const entityB = EntityManager.getEntity(componentB.parent);
-        if (entityA !== entityB) {
-          const parentTransformB = entityB.transform as TransformComponent
+    for (const collisionCompA of this._components) {
+      if (!collisionCompA.enabled) continue;
+      for (const collisionCompB of this._components) {
+        if (!collisionCompB.enabled || collisionCompA === collisionCompB) continue;
+        if ((collisionCompA as CollisionComponent).layerMask.includes((collisionCompB as CollisionComponent).layer)) {
+          const transformA = EntityManager.getEntity(collisionCompA.parent).components.Transform as TransformComponent;
+          const transformB = EntityManager.getEntity(collisionCompB.parent).components.Transform as TransformComponent;
           if (this.collisionRect(
-            componentA as BoxCollisionComponent,
-            componentB as BoxCollisionComponent,
-            parentTransformA,
-            parentTransformB
+            collisionCompA as CollisionComponent,
+            collisionCompB as CollisionComponent,
+            transformA,
+            transformB,
           )) {
-            const collision = (entityA as unknown) as Collision;
-            if (collision.onCollide) {
-              collision.onCollide(componentB as BoxCollisionComponent);
-            }
+            (collisionCompA as CollisionComponent).onCollide(collisionCompB as CollisionComponent);
           }
         }
       }
@@ -34,14 +30,14 @@ export class CollisionSystem extends System {
   }
 
   private collisionRect(
-    a: BoxCollisionComponent,
-    b: BoxCollisionComponent,
-    parentTransformA?: TransformComponent,
-    parentTransformB?: TransformComponent,
+    a: CollisionComponent,
+    b: CollisionComponent,
+    transformA: TransformComponent,
+    transformB: TransformComponent,
   ): boolean {
-    return (parentTransformA?.position?.x || 0) + a.position.x + a.width >= (parentTransformB?.position?.x || 0) + b.position.x
-      && (parentTransformA?.position?.x || 0) + a.position.x <= (parentTransformB?.position?.x || 0) + b.position.x + b.width
-      && (parentTransformA?.position?.y || 0) + a.position.y + a.height >= (parentTransformB?.position?.y || 0) + b.position.y
-      && (parentTransformA?.position?.y || 0) + a.position.y <= (parentTransformB?.position?.y || 0) + b.position.y + b.height;
+    return transformA.position.x + a.width >= transformB.position.x
+      && transformA.position.x <= transformB.position.x + b.width
+      && transformA.position.y + a.height >= transformB.position.y
+      && transformA.position.y <= transformB.position.y + b.height;
   }
 }

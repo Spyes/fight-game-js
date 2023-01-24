@@ -5,6 +5,7 @@ import { TransformComponent } from "../../components/TransformComponent";
 import { Input } from "../../core/Input";
 import { Entity } from "../../core/Entity";
 import { Vector2 } from "../../core/Vector2";
+import { CollisionComponent } from "../../components/CollisionComponent";
 
 interface IPlayer {
   name: string;
@@ -15,23 +16,25 @@ interface IPlayer {
   height: number;
   offset: Vector2;
   scale?: Vector2;
-  sprites: Record<string, { imageSrc: string; framesMax: number; }>;
+  sprites: RenderComponent['sprites'];
   defaultAnim: string;
 }
 
 export class Player extends Entity {
-  _name: string;
   _velocity: Vector2 = Vector2.Zero;
   _isJumping: boolean = false;
+  _isAttacking: boolean = false;
+  _health: number = 100;
   _keyMappings: Record<string, string>;
 
   _renderComp: RenderComponent;
   _transformComp: TransformComponent;
+  _boxCollision: CollisionComponent;
 
   constructor({ name, position, keyBindings, imageSrc, width, height, offset, scale, sprites, defaultAnim }: IPlayer) {
-    super({ position, scale });
+    super({ position, scale, name: 'Player' });
 
-    this._name = name;
+    this.name = name;
     this._keyMappings = keyBindings;
     this._transformComp = this.transform as TransformComponent;
 
@@ -42,13 +45,24 @@ export class Player extends Entity {
       offset,
       defaultAnim,
       sprites,
+      onAnimationEnd: () => this.onAnimationEnd(),
     });
     this.addComponent(this._renderComp);
+
+    this._boxCollision = new CollisionComponent({
+      width,
+      height,
+      layer: 1,
+      layerMask: [2],
+    });
+    this.addComponent(this._boxCollision);
   }
 
+  public get health() { return this._health; }
+  public set health(health: number) { this._health = health; }
+
   update(delta: number): void {
-    this._transformComp.position.x += this._velocity.x * delta;
-    this._transformComp.position.y += this._velocity.y * delta;
+    this._transformComp.position = Vector2.add(this._transformComp.position, Vector2.mult(this._velocity, delta));
 
     if (this._transformComp.position.y + this._renderComp.height + this._velocity.y >= canvas.height - 96) {
       this._velocity.y = 0;
@@ -60,28 +74,63 @@ export class Player extends Entity {
     this._velocity.x = 0;
     if (Input.keys[this._keyMappings.left].pressed) {
       this._velocity.x = -10;
-      this._renderComp.switchSprite('run');
+      if (this._renderComp.sprite !== 'attack') {
+        this._renderComp.switchSprite('run');
+      }
     } else if (Input.keys[this._keyMappings.right].pressed) {
       this._velocity.x = 10;
-      this._renderComp.switchSprite('run');
+      if (this._renderComp.sprite !== 'attack') {
+        this._renderComp.switchSprite('run');
+      }
     } else {
-      this._renderComp.switchSprite('idle');
+      if (this._renderComp.sprite !== 'attack') {
+        this._renderComp.switchSprite('idle');
+      }
     }
 
     if (this._velocity.y < 0) {
-      this._renderComp.switchSprite('jump');
+      if (this._renderComp.sprite !== 'attack') {
+        this._renderComp.switchSprite('jump');
+      }
     } else if (this._velocity.y > 0) {
-      this._renderComp.switchSprite('fall');
+      if (this._renderComp.sprite !== 'attack') {
+        this._renderComp.switchSprite('fall');
+      }
     } else {
       this._isJumping = false;
     }
 
     if (Input.keys[this._keyMappings.jump].pressed) this.jump();
+    if (Input.keys[this._keyMappings.attack].pressed) this.attack();
   }
 
   jump() {
     if (this._isJumping) return;
     this._velocity.y = -20;
     this._isJumping = true;
+  }
+
+  attack() {
+    if (this._renderComp.sprite === 'attack') return;
+    this._isAttacking = true;
+    this._renderComp.switchSprite('attack');
+  }
+
+  enableAttack() {
+    const playerAttackBox = this.getChild('playerAttackHitbox');
+    if (playerAttackBox) {
+      playerAttackBox.components.Collision.enabled = true;
+    }
+  }
+
+  onAnimationEnd() {
+    if (this._isAttacking) {
+      const playerAttackBox = this.getChild('playerAttackHitbox');
+      if (playerAttackBox) {
+        playerAttackBox.components.Collision.enabled = false;
+      }
+      this._isAttacking = false;
+      this._renderComp.switchSprite('idle');
+    }
   }
 }
